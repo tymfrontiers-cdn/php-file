@@ -1,0 +1,40 @@
+{
+  "name": "tymfrontiers-cdn/php-file",
+  "description": "PHP File Manager",
+  "keywords": ["php", "file","manager","tym","frontiers"],
+  "homepage": "https://github.com/tymfrontiers-cdn/php-file",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Sir Louis",
+          "email": "me@sirlouis.io",
+          "homepage": "https://sirlouis.io",
+          "role": "developer"
+      },
+      {
+          "name": "Tym Frontiers Ltd",
+          "email": "git@tymfrontiers.com",
+          "homepage": "https://tymfrontiers.com",
+          "role": "developer"
+      }
+  ],
+  "require": {
+    "php" : ">=5.3",
+    "tymfrontiers-cdn/php-mysql-database" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-mysql-database-object" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-pagination" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-file-writer" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-file-uploader" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-file-downloader" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-file-reader" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-file-data" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-photo-editor" : ">=0.1@stable"
+  },
+  "require-dev": {},
+  "autoload": {
+      "psr-4": {
+          "TymFrontiers\\": "src/"
+      }
+  }
+}
