@@ -14,13 +14,27 @@ class File{
     	}
 
   protected static $_primary_key='id';
-  protected static $_db_name;
-  protected static $_table_name='files';
-  protected static $_db_fields=['id','owner','privacy','caption','nice_name','_path','_name','_size','_type','_updated','_created'];
+  protected static $_db_name = MYSQL_BASE_DB;
+  protected static $_table_name='file';
+  protected static $_prop_type = [];
+  protected static $_prop_size = [];
+  protected static $_db_fields=[
+    'id',
+    'owner',
+    'privacy',
+    'caption',
+    'nice_name',
+    '_path',
+    '_name',
+    '_size',
+    '_type',
+    '_updated',
+    '_created'
+  ];
 
   public $id;
 	public $owner;
-  public $privacy = 'public';
+  public $privacy = 'PUBLIC';
 	public $caption;
 	public $nice_name;
 
@@ -41,14 +55,14 @@ class File{
     // }
   }
   private function _checkEnv(){
-    if( ! \defined('FILE_DB') ){
-      throw new \Exception("File storage database not defined. Define constance 'FILE_DB' to hold name of database where file meta info will be stored.", 1);
-    }
-    if( ! \defined('FILE_TBL') ){
-      throw new \Exception("File storage table not defined. Define constance 'FILE_TBL' to hold name of database table where file meta info will be stored.", 1);
-    }
-    $this->setDatabase( \FILE_DB );
-    $this->setTable( \FILE_TBL );
+    // if( ! \defined('FILE_DB') ){
+    //   throw new \Exception("File storage database not defined. Define constance 'FILE_DB' to hold name of database where file meta info will be stored.", 1);
+    // }
+    // if( ! \defined('FILE_TBL') ){
+    //   throw new \Exception("File storage table not defined. Define constance 'FILE_TBL' to hold name of database table where file meta info will be stored.", 1);
+    // }
+    // $this->setDatabase( \FILE_DB );
+    // $this->setTable( \FILE_TBL );
   }
   public function load($filename){
     if( !\is_int($filename) ){
