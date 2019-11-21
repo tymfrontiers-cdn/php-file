@@ -49,12 +49,12 @@ class File{
 	public $errors = []; # follows Tym Error system
 
   function __construct(){
-    $this->_checkEnv();
+    self::_checkEnv();
     // if( !empty($filename) ){
     //   $this->load($filename,$mkdir);
     // }
   }
-  private function _checkEnv(){
+  private static function _checkEnv(){
     // if( ! \defined('FILE_DB') ){
     //   throw new \Exception("File storage database not defined. Define constance 'FILE_DB' to hold name of database where file meta info will be stored.", 1);
     // }
