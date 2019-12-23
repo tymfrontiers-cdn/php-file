@@ -13,13 +13,15 @@ class File{
     		Helper\FileUploader::save insteadof Helper\MySQLDatabaseObject;
     	}
 
-  protected static $_primary_key='id';
-  protected static $_db_name = MYSQL_BASE_DB;
-  protected static $_table_name='file';
+  protected static $_primary_key = 'id';
+  protected static $_db_name;
+  protected static $_table_name;
   protected static $_prop_type = [];
   protected static $_prop_size = [];
   protected static $_db_fields=[
     'id',
+    '_locked',
+    '_checksum',
     'owner',
     'privacy',
     'caption',
@@ -33,6 +35,8 @@ class File{
   ];
 
   public $id;
+  private $_locked = false;
+  private $_checksum = NULL;
 	public $owner;
   public $privacy = 'PUBLIC';
 	public $caption;
@@ -48,25 +52,25 @@ class File{
 
 	public $errors = []; # follows Tym Error system
 
-  function __construct(){
+  function __construct( $filename = "", bool $mkdir = false){
     self::_checkEnv();
-    // if( !empty($filename) ){
-    //   $this->load($filename,$mkdir);
-    // }
+    if( !empty($filename) ){
+      $this->load($filename, $mkdir);
+    }
   }
   private static function _checkEnv(){
-    // if( ! \defined('FILE_DB') ){
-    //   throw new \Exception("File storage database not defined. Define constance 'FILE_DB' to hold name of database where file meta info will be stored.", 1);
-    // }
-    // if( ! \defined('FILE_TBL') ){
-    //   throw new \Exception("File storage table not defined. Define constance 'FILE_TBL' to hold name of database table where file meta info will be stored.", 1);
-    // }
-    // $this->setDatabase( \FILE_DB );
-    // $this->setTable( \FILE_TBL );
+    if( !\defined('MYSQL_FILE_DB') || !\defined('MYSQL_FILE_TBL') ){
+      throw new \Exception("File storage database not defined. Define constant 'MYSQL_FILE_DB' to hold name of database where file meta info will be stored.", 1);
+    }
+    if( ! \defined('MYSQL_FILE_TBL') ){
+      throw new \Exception("File storage table not defined. Define constan 'MYSQL_FILE_TBL' to hold name of database table where file meta info will be stored.", 1);
+    }
+    self::$_db_name = MYSQL_FILE_DB;
+    self::$_table_name = MYSQL_FILE_TBL;
   }
-  public function load($filename){
-    if( !\is_int($filename) ){
-      if( \is_dir($filename) && !\file_exists($filename) ){
+  public function load($filename, bool $mkdir = false){
+    if ($mkdir && !\is_int($filename)) {
+      if( !\file_exists($filename) ){
         \mkdir($filename,0777,true);
       }
     }
@@ -85,7 +89,6 @@ class File{
       $this->_type =  \array_key_exists($file['extension'],$this->mime_types) ?  $this->mime_types[$file['extension']] : \mime_content_type($filename);
       $this->nice_name = $file['filename'];
     }elseif( \is_int($filename) ){
-      global $db;
       $file = self::findById( (int)$filename );
       if( !$file ){
         throw new \Exception("No file was found with given ID: [{$filename}]", 1);
@@ -105,6 +108,11 @@ class File{
     return !empty($ext) && \array_key_exists(strtolower($ext),$this->mime_types) ? $this->mime_types[strtolower($ext)] : (
       !empty($this->_type) ? $this->_type : 'unknown/unknown'
       );
+  }
+  public function groupName() {
+    return !\array_key_exists($this->_type, $this->mime_group)
+      ? NULL
+      : $this->mime_group[$this->_type];
   }
 	public function mimeType(){ return $this->_type; }
 	public function name(string $name=''){
@@ -138,6 +146,7 @@ class File{
     return true;
   }
   // public function delete(){ return $this->destroy(); }
+
   public function sizeAsText() {
     if($this->size < 1024) {
       return "{$this->size} bytes";
@@ -158,7 +167,17 @@ class File{
   public function dbname(){ return static::$_db_name; }
   public function tblname(){ return static::$_table_name; }
   public function update(){
+    if ((bool)$this->locked) {
+      $this->errors['update'][] = [0,256, "File is locked and can not be updated",__FILE__, __LINE__];
+      return false;
+    }
     return !empty($this->id) ? $this->_update() : false;
+  }
+  public function checksum() { return $this->_checksum; }
+  public function locked() { return $this->_locked; }
+  public function lock() {
+    // calculate and save checksum
+    return false;
   }
 
 }
