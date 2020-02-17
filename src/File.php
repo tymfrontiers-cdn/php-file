@@ -52,12 +52,12 @@ class File{
 
 	public $errors = []; # follows Tym Error system
 
-  function __construct( $filename = "", bool $mkdir = false){
-    self::_checkEnv();
-    if( !empty($filename) ){
-      $this->load($filename, $mkdir);
-    }
-  }
+  // function __construct( $filename = "", bool $mkdir = false){
+  //   self::_checkEnv();
+  //   if( !empty($filename) ){
+  //     $this->load($filename, $mkdir);
+  //   }
+  // }
   private static function _checkEnv(){
     if( !\defined('MYSQL_FILE_DB') || !\defined('MYSQL_FILE_TBL') ){
       throw new \Exception("File storage database not defined. Define constant 'MYSQL_FILE_DB' to hold name of database where file meta info will be stored.", 1);
