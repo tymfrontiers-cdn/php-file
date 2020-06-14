@@ -26,6 +26,7 @@ class File{
     'privacy',
     'caption',
     'nice_name',
+    'type_group',
     '_path',
     '_name',
     '_size',
@@ -41,6 +42,7 @@ class File{
   public $privacy = 'PUBLIC';
 	public $caption;
 	public $nice_name;
+	public $type_group;
 
   protected $_path;
 	protected $_name;
@@ -87,6 +89,7 @@ class File{
       $this->_name = $file['basename'];
       $this->_size = filesize($filename);
       $this->_type =  \array_key_exists($file['extension'],$this->mime_types) ?  $this->mime_types[$file['extension']] : \mime_content_type($filename);
+      $this->type_group = $this->groupName();
       $this->nice_name = $file['filename'];
     }elseif( \is_int($filename) ){
       $file = self::findById( (int)$filename );
@@ -109,10 +112,11 @@ class File{
       !empty($this->_type) ? $this->_type : 'unknown/unknown'
       );
   }
-  public function groupName() {
-    return !\array_key_exists($this->_type, $this->mime_group)
+  public function groupName( string $mime = "") {
+    $mime = !empty($mime) ? $mime : $this->_type;
+    return !\array_key_exists($mime, $this->mime_group)
       ? NULL
-      : $this->mime_group[$this->_type];
+      : $this->mime_group[$mime];
   }
 	public function mimeType(){ return $this->_type; }
 	public function name(string $name=''){
