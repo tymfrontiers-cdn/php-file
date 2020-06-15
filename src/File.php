@@ -31,6 +31,7 @@ class File{
     '_name',
     '_size',
     '_type',
+    '_creator',
     '_updated',
     '_created'
   ];
@@ -49,6 +50,7 @@ class File{
 	protected $_size;
 	protected $_type;
 
+	private $_creator;
 	private $_updated;
 	private $_created;
 
