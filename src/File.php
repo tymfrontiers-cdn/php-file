@@ -181,6 +181,7 @@ class File{
   }
   public function checksum() { return $this->_checksum; }
   public function locked() { return $this->_locked; }
+  public function creator() { return $this->_creator; }
   public function lock() {
     // calculate and save checksum
     return false;
