@@ -22,6 +22,7 @@ class File{
     'id',
     '_locked',
     '_checksum',
+    '_watermarked',
     'owner',
     'privacy',
     'caption',
@@ -39,6 +40,7 @@ class File{
   public $id;
   private $_locked = false;
   private $_checksum = NULL;
+  private $_watermarked = false;
 	public $owner;
   public $privacy = 'PUBLIC';
 	public $caption;
@@ -181,6 +183,7 @@ class File{
   }
   public function checksum() { return $this->_checksum; }
   public function locked() { return $this->_locked; }
+  public function watermarked() { return $this->_watermarked; }
   public function creator() { return $this->_creator; }
   public function lock() {
     // calculate and save checksum
