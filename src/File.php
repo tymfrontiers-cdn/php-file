@@ -135,7 +135,7 @@ class File{
   }
 	public function url(){
     global $_SERVER;
-    return "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/file/{$this->_name}";
+    return "/app/file/{$this->_name}";
   }
 	public function thumbUrl(){
     global $_SERVER;
