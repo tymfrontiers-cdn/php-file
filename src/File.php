@@ -145,8 +145,9 @@ class File{
 	public function create(){ return $this->_create();}
   public function destroy() {
     try {
-      $this->delete();
+      Helper\setting_unset_file_default($this->id);
       \unlink( $this->fullPath() );
+      $this->delete();
     } catch ( \Exception $e) {
       $this->errors['destroy'][] = [0,256,"Failed to delete/destroy file, due to error: {$e->getMessage()}",__FILE__,__LINE__];
       return false;
@@ -175,7 +176,7 @@ class File{
   public function dbname(){ return static::$_db_name; }
   public function tblname(){ return static::$_table_name; }
   public function update(){
-    if ((bool)$this->locked) {
+    if ((bool)$this->_locked) {
       $this->errors['update'][] = [0,256, "File is locked and can not be updated",__FILE__, __LINE__];
       return false;
     }
@@ -187,7 +188,9 @@ class File{
   public function creator() { return $this->_creator; }
   public function lock() {
     // calculate and save checksum
-    return false;
+    $this->_checksum = \hash_file("sha512", $this->fullPath(), false);
+    $this->_locked = true;
+    return $this->_update();
   }
 
 }
