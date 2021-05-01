@@ -144,6 +144,11 @@ class File{
 	public function fullPath(){ return $this->_path."/".$this->_name; }
 	public function create(){ return $this->_create();}
   public function destroy() {
+    global $session;
+    if ($this->_creator !== $session->name) {
+      $this->errors['destroy'][] = [0,256,"Access denied",__FILE__,__LINE__];
+      return false;
+    }
     try {
       Helper\setting_unset_file_default($this->id);
       \unlink( $this->fullPath() );
