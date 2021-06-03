@@ -13,6 +13,7 @@ class File{
     		Helper\FileUploader::save insteadof Helper\MySQLDatabaseObject;
     	}
 
+  const STORAGE_DIR = FILE_STORAGE_DIR;
   protected static $_primary_key = 'id';
   protected static $_db_name;
   protected static $_table_name;
@@ -82,14 +83,14 @@ class File{
     }
     if( \is_dir($filename) ){
       // init directory
-      $this->_path = $filename;
+      $this->_path = \str_replace(self::STORAGE_DIR, "", $filename);
     }elseif( \is_file($filename) ){
       // init file
       $file = \pathinfo($filename);
       if( !\array_key_exists($file['extension'],$this->mime_types) && !\in_array( \mime_content_type($filename),$this->mime_types ) ){
         throw new \Exception("Unknown file type given", 1);
       }
-      $this->_path = $file['dirname'];
+      $this->_path = \str_replace(self::STORAGE_DIR, "", $file['dirname']);
       $this->_name = $file['basename'];
       $this->_size = filesize($filename);
       $this->_type =  \array_key_exists($file['extension'],$this->mime_types) ?  $this->mime_types[$file['extension']] : \mime_content_type($filename);
@@ -141,7 +142,7 @@ class File{
     global $_SERVER;
     return "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/file/thumb-{$this->_name}";
   }
-	public function fullPath(){ return $this->_path."/".$this->_name; }
+	public function fullPath(){ return self::STORAGE_DIR . $this->_path."/".$this->_name; }
 	public function create(){ return $this->_create();}
   public function destroy() {
     global $session;
