@@ -135,12 +135,7 @@ class File{
     return $this->_size;
   }
 	public function url(){
-    global $_SERVER;
-    return "/app/file/{$this->_name}";
-  }
-	public function thumbUrl(){
-    global $_SERVER;
-    return "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/file/thumb-{$this->_name}";
+    return "//" . (\defined("PRJ_FILE_DOMAIN") ? PRJ_FILE_DOMAIN : PRJ_DOMAIN) . "/app/file/{$this->_name}";
   }
 	public function fullPath(){ return self::STORAGE_DIR . $this->_path."/".$this->_name; }
 	public function create(){ return $this->_create();}
