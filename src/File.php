@@ -135,7 +135,7 @@ class File{
     return $this->_size;
   }
 	public function url(){
-    return "//" . (\defined("PRJ_FILE_DOMAIN") ? PRJ_FILE_DOMAIN : PRJ_DOMAIN) . "/app/file/{$this->_name}";
+    return "//" . (\defined("PRJ_FILE_DOMAIN") ? PRJ_FILE_DOMAIN : PRJ_DOMAIN) . "/{$this->_name}";
   }
 	public function fullPath(){ return self::STORAGE_DIR . $this->_path."/".$this->_name; }
 	public function create(){ return $this->_create();}
