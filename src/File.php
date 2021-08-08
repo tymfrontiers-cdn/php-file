@@ -186,7 +186,10 @@ class File{
   public function checksum() { return $this->_checksum; }
   public function locked() { return $this->_locked; }
   public function watermarked() { return $this->_watermarked; }
-  public function creator() { return $this->_creator; }
+  public function creator(string $val = '') {
+    if (!empty($val)) $this->_creator = $val; 
+    return (!empty($val)) ? $val : $this->_creator;
+  }
   public function lock() {
     // calculate and save checksum
     $this->_checksum = \hash_file("sha512", $this->fullPath(), false);
